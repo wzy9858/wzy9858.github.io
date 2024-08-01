@@ -1,5 +1,7 @@
 # 使用github部署vuepress
 
+在gitee中推送到github,使用github自动化构建完成部署。
+
 ## 部署自动化构建
 在.github\workflows\docs.yml文件中
 ```yml
