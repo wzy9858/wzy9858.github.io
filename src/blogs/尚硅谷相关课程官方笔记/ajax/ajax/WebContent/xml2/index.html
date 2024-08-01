@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>People at Clearleft</title>
+<style type="text/css">
+@import url("clearleft.css");
+</style>
+<script type="text/javascript" src="../scripts/jquery-1.7.2.js"></script>
+<script type="text/javascript">
+	
+	$(function(){
+		$("a").click(function(){
+			
+			var url = this.href;
+			var args = {"time":new Date()};
+			
+			//url: 
+			//args: JSON 格式
+			//function: 回调函数: 当响应结束时, 回调函数被触发. 响应结果在 data 中. 
+			$.post(url, args, function(data){
+				var name = $(data).find("name").text();
+				var email = $(data).find("email").text();
+				var website = $(data).find("website").text();
+				
+				$("#details").empty()
+				             .append("<h2><a href='mailto:" + email + "'>" + name + "</a></h2>")
+				             .append("<a href='" +　website +　"'>" + website + "</a>");
+			});
+			
+			return false;
+		});
+	})
+	
+</script>
+
+</head>
+<body>
+	<h1>People</h1>
+	<ul>
+		<li><a href="files/andy.xml">Andy</a></li>
+		<li><a href="files/richard.xml">Richard</a></li>
+		<li><a href="files/jeremy.xml">Jeremy</a></li>
+	</ul>
+	<div id="details"></div>
+</body>
+</html>

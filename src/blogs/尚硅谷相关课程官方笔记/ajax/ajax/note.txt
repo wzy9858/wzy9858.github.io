@@ -1,0 +1,104 @@
+4. 需求: 实现 城市 -> 部门 -> 员工 -> 员工的详细信息的 Ajax 显示
+
+1). 3 张数据表
+
+locations:   location_id, city
+departments: department_id, department_name, location_id
+employees:   employee_id, last_name, salary, email, department_id
+
+2). 需要新学习的 jQuery 的一个插件: blockUI
+
+3). 准备工作: 可以在页面上显示所有的城市信息. 
+
+/employees.jsp 
+	--重定向--> EmployeeServlet's listLocations(获取了全部的 Location 信息, 并把 locations 放入到 request 中了)
+	---转发--> /WEB-INF/pages/employees.jsp(使用 JSTL 显示了所有的城市的信息)
+	
+4). 使用 BlockUI: ajax 请求发出时执行 $.blockUI, ajax 响应送达时执行 $.unblockUI
+
+$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);	
+
+可以对样式做出修改: 需要把 $.blockUI 包含在一个 function(){} 中
+
+$(document).ajaxStart(function(){
+	$.blockUI({             
+		message: $('#loading'),             
+		css: {
+			top:  ($(window).height() - 400) /2 + 'px',                 
+			left: ($(window).width() - 400) /2 + 'px',                 
+			width: '400px',
+			border: 'none'
+		},
+		overlayCSS: { backgroundColor: '#fff' } 
+	})	
+})
+
+具体的效果可以参看文档. 
+
+
+	
+1. 什么是 Ajax ? 不用刷新页面, 但可以和服务端进行通信的方式. 使用 Ajax 的主要方式是 XMLHttpRequest 对象
+
+2. 使用  XMLHttpRequest 对象实现 Ajax. [了解]
+
+3. Ajax 传输数据的 3 种方式:
+
+1). XML: 笨重, 解析困难. 但 XML 是通用的数据交换格式. 
+2). HTML: 不需要解析可以直接放到文档中. 若仅更新一部分区域. 但传输的数据不是很方便, 且 HTML 代码需要拼装完成. 
+3). JSON: 小巧, 有面向对象的特征, 且有很多第三方的 jar 包可以把 Java 对象或集合转为 JSON 字符串. 
+
+4. 使用 jQuery 完成 Ajax 操作
+
+1). load 方法: 可以用于 HTML 文档的元素节点, 把结果直接加为对应节点的子元素. 通常而言, load 方法加载后的数据时一个 HTML 片段.
+
+var $obj = ...
+var url = ...
+var args = {key:value,...};
+$obj.load(url, args);
+
+2). $.get,$.post,$.getJSON: 更加灵活. 除去使用 load 方法的情况, 大部分时候都使用这 3 个方法
+
+I. 基本的使用
+
+//url: Ajax 请求的目标 URL
+//args: 传递的参数: JSON 类型
+//data: Ajax 响应成功后的数据. 可能是 XML, HTML, JSON
+$.get(url, args, function(data){
+
+})
+
+II. 请求 JSON 数据
+
+$.get(url, args, function(data){
+	
+}, "JSON");
+
+$.post(url, args, function(data){
+	
+}, "JSON");
+
+$.getJSON(url, args, function(data){
+
+})
+
+5. 使用 JackSon
+
+1). 加入 jar 包:
+
+jackson-annotations-2.2.2.jar
+jackson-core-2.2.2.jar
+jackson-databind-2.2.2.jar
+
+2). 具体的使用步骤:
+
+I.  创建 org.codehaus.jackson.map.ObjectMapper 对象
+II. 调用 ObjectMapper 的  writerValueAsString 方法把 Java 对象或集合转为 JSON 字符串
+
+ObjectMapper mapper = new ObjectMapper();
+String jsonStr = mapper.writeValueAsString(customer);
+
+III. 注意:
+
+①. JackSon 根据 getter 来定位 Json 对象的属性, 而不是字段!
+②. 可以在类的 getter 方法上添加注解: org.codehaus.jackson.annotate.JsonIgnore. 在转为 JSON 
+对象时以忽略该属性!

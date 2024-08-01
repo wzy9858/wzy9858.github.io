@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c3p0-config>
+
+	<named-config name="ajaxApp">
+		<property name="user">scott</property>
+		<property name="password">java</property>
+		<property name="jdbcUrl">jdbc:oracle:thin:@127.0.0.1:1521:orcl</property>
+		<property name="driverClass">oracle.jdbc.driver.OracleDriver</property> 
+	
+		<property name="acquireIncrement">2</property>
+		<property name="initialPoolSize">2</property>
+		<property name="minPoolSize">2</property>
+		<property name="maxPoolSize">3</property> 
+		<property name="maxStatements">5</property>
+		<property name="maxStatementsPerConnection">2</property> 
+	</named-config>
+	
+</c3p0-config>
