@@ -18,7 +18,11 @@ linux写的笔记有点杂乱，我决定把自己常用的命令总结到这里
 `df -h` 以人类可读方式显示文件系统磁盘使用情况统计
 `du` 显示目录或文件大小
 `-h `人类可读的形式
-`-a` 显示目录，及其目录下的文件大小
+`who` 查看当前登录的用户
+
+### 更改密码
+
+`sudo passwd 用户名`
 
 ### 后台运行
 在命令的末尾+&程序可以在后台运行，退出当前账户该程序就会停止运行
@@ -127,8 +131,6 @@ Kdyq1108!
 
 在`~/.bashrc`中添加每次启动终端要输出的，这样每次连接都会出现cowsay的图像了
 
-
-
 ## nginx
 
 cd /etc/nginx/ 在这个目录里面有nginx.conf文件
@@ -150,7 +152,11 @@ http {
 }
 ```
 
+## 安装软件
 
+### ssh
+
+`sudo apt-get install openssh-server`
 
 
 
@@ -171,5 +177,28 @@ vimrc 配置文件
 `>G` 增加当前行到文档末尾处的缩进层级
 `.`重复上一次的操作，重复的是修改操作
 
+# Ubuntu
 
+### 拿到一台崭新的ubuntu服务器你会做什么
 
+更新
+
+`sudo apt update`
+
+`sudo apt upgrade`
+
+安装fish
+
+`sudo apt install fish`
+
+查看剩下多少空间
+
+`df -h`
+
+查看内存
+
+`free -h`
+
+查看详细信息
+
+`sudo apt install neofetch`

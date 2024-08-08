@@ -26,3 +26,36 @@ maven java8 java数据结构 spring springmvc springboot
 
 3. 前端相关
 
+
+
+
+
+
+
+
+
+#  Java后端全栈需要学什么,什么很重要?
+
+
+
+* java基础
+* java并发(线程池,线程,锁,JUC)
+* 数据结构与算法
+* 设计模式
+* JVM
+* mysql(表设计,优化，索引，B+树)
+* SSM(spring di AOP 动态代理 循环依赖)
+* redis
+* 微服务 springcloud
+* 分布式框架
+
+
+
+前端的一些
+
+* HTML
+* CSS
+* JS
+* AJax
+* VUE
+* 

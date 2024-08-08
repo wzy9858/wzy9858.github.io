@@ -96,16 +96,16 @@ MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过�
 1.  准备数据模型
     ```sql
     CREATE DATABASE `mybatis-example`;
-
+    
     USE `mybatis-example`;
-
+    
     CREATE TABLE `t_emp`(
       emp_id INT AUTO_INCREMENT,
       emp_name CHAR(100),
       emp_salary DOUBLE(10,5),
       PRIMARY KEY(emp_id)
     );
-
+    
     INSERT INTO `t_emp`(emp_name,emp_salary) VALUES("tom",200.33);
     INSERT INTO `t_emp`(emp_name,emp_salary) VALUES("jerry",666.66);
     INSERT INTO `t_emp`(emp_name,emp_salary) VALUES("andy",777.77);
@@ -125,14 +125,14 @@ MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过�
               <artifactId>mybatis</artifactId>
               <version>3.5.11</version>
           </dependency>
-
+        
           <!-- MySQL驱动 mybatis底层依赖jdbc驱动实现,本次不需要导入连接池,mybatis自带! -->
           <dependency>
               <groupId>mysql</groupId>
               <artifactId>mysql-connector-java</artifactId>
               <version>8.0.25</version>
           </dependency>
-
+        
           <!--junit5测试-->
           <dependency>
               <groupId>org.junit.jupiter</groupId>
@@ -144,11 +144,11 @@ MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过�
     3.  实体类准备
         ```java
         public class Employee {
-
+        
             private Integer empId;
-
+        
             private String empName;
-
+        
             private Double empSalary;
             
             //getter | setter
@@ -172,16 +172,16 @@ MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过�
         包：com.atguigu.mapper
         ```java
         package com.atguigu.mapper;
-
+        
         import com.atguigu.pojo.Employee;
-
+        
         /**
          * t_emp表对应数据库SQL语句映射接口!
          *    接口只规定方法,参数和返回值!
          *    mapper.xml中编写具体SQL语句!
          */
         public interface EmployeeMapper {
-
+        
             /**
              * 根据员工id查询员工数据方法
              * @param empId  员工id
@@ -230,7 +230,7 @@ MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过�
       PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-config.dtd">
     <configuration>
-
+    
       <!-- environments表示配置Mybatis的开发环境，可以配置多个环境，在众多具体环境中，使用default属性指定实际运行时使用的环境。default属性的取值是environment标签的id属性的值。 -->
       <environments default="development">
         <!-- environment表示配置Mybatis的一个具体的环境 -->
@@ -247,7 +247,7 @@ MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过�
           </dataSource>
         </environment>
       </environments>
-
+    
       <mappers>
         <!-- Mapper注册：指定Mybatis映射文件的具体位置 -->
         <!-- mapper标签：配置一个具体的Mapper映射文件 -->
@@ -255,7 +255,7 @@ MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过�
         <!--    对Maven工程的目录结构来说，resources目录下的内容会直接放入类路径，所以这里我们可以以resources目录为基准 -->
         <mapper resource="mappers/EmployeeMapper.xml"/>
       </mappers>
-
+    
     </configuration>
     ```
 5.  运行和测试
@@ -266,35 +266,34 @@ MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过�
      * description: 测试类
      */
     public class MyBatisTest {
-
         @Test
         public void testSelectEmployee() throws IOException {
-
+    
             // 1.创建SqlSessionFactory对象
             // ①声明Mybatis全局配置文件的路径
             String mybatisConfigFilePath = "mybatis-config.xml";
-
+    
             // ②以输入流的形式加载Mybatis配置文件
             InputStream inputStream = Resources.getResourceAsStream(mybatisConfigFilePath);
-
+    
             // ③基于读取Mybatis配置文件的输入流创建SqlSessionFactory对象
             SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-
+    
             // 2.使用SqlSessionFactory对象开启一个会话
             SqlSession session = sessionFactory.openSession();
-
+    
             // 3.根据EmployeeMapper接口的Class对象获取Mapper接口类型的对象(动态代理技术)
             EmployeeMapper employeeMapper = session.getMapper(EmployeeMapper.class);
-
+    
             // 4. 调用代理类方法既可以触发对应的SQL语句
             Employee employee = employeeMapper.selectEmployee(1);
-
+    
             System.out.println("employee = " + employee);
-
+    
             // 4.关闭SqlSession
             session.commit(); //提交事务 [DQL不需要,其他需要]
             session.close(); //关闭会话
-
+    
         }
     }
     ```
@@ -815,7 +814,7 @@ public void testSelectAll() {
             #{password}
         )
     </insert>
-
+    
     ```
     在上例中，我们定义了一个 `insertUser` 的插入语句来将 `User` 对象插入到 `user` 表中。我们使用 `selectKey` 来查询 UUID 并设置到 `id` 字段中。
 
@@ -836,11 +835,11 @@ public void testSelectAll() {
     <!-- 编写具体的SQL语句，使用id属性唯一的标记一条SQL语句 -->
     <!-- resultType属性：指定封装查询结果的Java实体类的全类名 -->
     <select id="selectEmployee" resultType="com.atguigu.mybatis.entity.Employee">
-
+    
       <!-- Mybatis负责把SQL语句中的#{}部分替换成“?”占位符 -->
       <!-- 给每一个字段设置一个别名，让别名和Java实体类中属性名一致 -->
       select emp_id empId,emp_name empName,emp_salary empSalary from t_emp where emp_id=#{maomi}
-
+    
     </select>
     ```
     > 关于实体类属性的约定：
@@ -851,19 +850,19 @@ public void testSelectAll() {
     ```xml
     <!-- 使用settings对Mybatis全局进行设置 -->
     <settings>
-
+    
       <!-- 将xxx_xxx这样的列名自动映射到xxXxx这样驼峰式命名的属性名 -->
       <setting name="mapUnderscoreToCamelCase" value="true"/>
-
+    
     </settings>
     ```
     SQL语句中可以不使用别名
     ```xml
     <!-- Employee selectEmployee(Integer empId); -->
     <select id="selectEmployee" resultType="com.atguigu.mybatis.entity.Employee">
-
+    
       select emp_id,emp_name,emp_salary from t_emp where emp_id=#{empId}
-
+    
     </select>
     ```
 3.  使用resultMap
@@ -872,23 +871,23 @@ public void testSelectAll() {
     ```xml
     <!-- 专门声明一个resultMap设定column到property之间的对应关系 -->
     <resultMap id="selectEmployeeByRMResultMap" type="com.atguigu.mybatis.entity.Employee">
-
+    
       <!-- 使用id标签设置主键列和主键属性之间的对应关系 -->
       <!-- column属性用于指定字段名；property属性用于指定Java实体类属性名 -->
       <id column="emp_id" property="empId"/>
-
+    
       <!-- 使用result标签设置普通字段和Java实体类属性之间的关系 -->
       <result column="emp_name" property="empName"/>
-
+    
       <result column="emp_salary" property="empSalary"/>
-
+    
     </resultMap>
-
+    
     <!-- Employee selectEmployeeByRM(Integer empId); -->
     <select id="selectEmployeeByRM" resultMap="selectEmployeeByRMResultMap">
-
+    
       select emp_id,emp_name,emp_salary from t_emp where emp_id=#{empId}
-
+    
     </select>
     ```
 
@@ -904,7 +903,7 @@ public void testSelectAll() {
       `password` VARCHAR(50) NOT NULL,
       PRIMARY KEY (`id`)
     ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
+    
     ```
 2.  实体类准备
 
@@ -924,13 +923,13 @@ public void testSelectAll() {
     public interface UserMapper {
       
       int insert(User user);
-
+    
       int update(User user);
-
+    
       int delete(Integer id);
-
+    
       User selectById(Integer id);
-
+    
       List<User> selectAll();
     }
     ```
@@ -969,7 +968,7 @@ public void testSelectAll() {
       </select>
       
     </mapper>
-
+    
     ```
 5.  MyBatis配置文件
 
@@ -980,19 +979,19 @@ public void testSelectAll() {
             PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
             "http://mybatis.org/dtd/mybatis-3-config.dtd">
     <configuration>
-
+    
         <settings>
             <!-- 开启驼峰式映射-->
             <setting name="mapUnderscoreToCamelCase" value="true"/>
             <!-- 开启logback日志输出-->
             <setting name="logImpl" value="SLF4J"/>
         </settings>
-
+    
         <typeAliases>
             <!-- 给实体类起别名 -->
             <package name="com.atguigu.pojo"/>
         </typeAliases>
-
+    
         <!-- environments表示配置Mybatis的开发环境，可以配置多个环境，在众多具体环境中，使用default属性指定实际运行时使用的环境。default属性的取值是environment标签的id属性的值。 -->
         <environments default="development">
             <!-- environment表示配置Mybatis的一个具体的环境 -->
@@ -1009,7 +1008,7 @@ public void testSelectAll() {
                 </dataSource>
             </environment>
         </environments>
-
+    
         <mappers>
             <!-- Mapper注册：指定Mybatis映射文件的具体位置 -->
             <!-- mapper标签：配置一个具体的Mapper映射文件 -->
@@ -1017,13 +1016,13 @@ public void testSelectAll() {
             <!--    对Maven工程的目录结构来说，resources目录下的内容会直接放入类路径，所以这里我们可以以resources目录为基准 -->
             <mapper resource="mappers/UserMapper.xml"/>
         </mappers>
-
+    
     </configuration>
     ```
 6.  效果测试
     ```java
     package com.atguigu.test;
-
+    
     import com.atguigu.mapper.UserMapper;
     import com.atguigu.pojo.User;
     import org.apache.ibatis.io.Resources;
@@ -1032,18 +1031,18 @@ public void testSelectAll() {
     import org.junit.jupiter.api.AfterEach;
     import org.junit.jupiter.api.BeforeEach;
     import org.junit.jupiter.api.Test;
-
+    
     import java.io.IOException;
     import java.util.List;
-
+    
     /**
      * projectName: com.atguigu.test
      */
     public class MyBatisTest {
-
+    
         private SqlSession session;
         // junit会在每一个@Test方法前执行@BeforeEach方法
-
+    
         @BeforeEach
         public void init() throws IOException {
             session = new SqlSessionFactoryBuilder()
@@ -1051,7 +1050,7 @@ public void testSelectAll() {
                             Resources.getResourceAsStream("mybatis-config.xml"))
                     .openSession();
         }
-
+    
         @Test
         public void createTest() {
             User user = new User();
@@ -1061,7 +1060,7 @@ public void testSelectAll() {
             userMapper.insert(user);
             System.out.println(user);
         }
-
+    
         @Test
         public void updateTest() {
             UserMapper userMapper = session.getMapper(UserMapper.class);
@@ -1072,7 +1071,7 @@ public void testSelectAll() {
             user = userMapper.selectById(1);
             System.out.println(user);
         }
-
+    
         @Test
         public void deleteTest() {
             UserMapper userMapper = session.getMapper(UserMapper.class);
@@ -1080,21 +1079,21 @@ public void testSelectAll() {
             User user = userMapper.selectById(1);
             System.out.println("user = " + user);
         }
-
+    
         @Test
         public void selectByIdTest() {
             UserMapper userMapper = session.getMapper(UserMapper.class);
             User user = userMapper.selectById(1);
             System.out.println("user = " + user);
         }
-
+    
         @Test
         public void selectAllTest() {
             UserMapper userMapper = session.getMapper(UserMapper.class);
             List<User> userList = userMapper.selectAll();
             System.out.println("userList = " + userList);
         }
-
+    
         // junit会在每一个@Test方法后执行@@AfterEach方法
         @AfterEach
         public void clear() {
@@ -1102,7 +1101,7 @@ public void testSelectAll() {
             session.close();
         }
     }
-
+    
     ```
 
 ### 2.5 mapperXML标签总结
@@ -1286,20 +1285,20 @@ select 元素允许你配置很多属性来配置每条语句的行为细节：
         例如：
         ```java
         public class Customer {
-
+        
           private Integer customerId;
           private String customerName;
-
+        
         }
-
+        
         public class Order {
-
+        
           private Integer orderId;
           private String orderName;
           private Customer customer;// 体现的是对一的关系
-
+        
         }  
-
+        
         ```
     -   对多: 用户对应的订单，讲师对应的学生或者学生对应的讲师都是对多关系：
 
@@ -1338,11 +1337,11 @@ select 元素允许你配置很多属性来配置每条语句的行为细节：
     数据库：
     ```sql
     CREATE TABLE `t_customer` (`customer_id` INT NOT NULL AUTO_INCREMENT, `customer_name` CHAR(100), PRIMARY KEY (`customer_id`) );
-
+    
     CREATE TABLE `t_order` ( `order_id` INT NOT NULL AUTO_INCREMENT, `order_name` CHAR(100), `customer_id` INT, PRIMARY KEY (`order_id`) ); 
-
+    
     INSERT INTO `t_customer` (`customer_name`) VALUES ('c01');
-
+    
     INSERT INTO `t_order` (`order_name`, `customer_id`) VALUES ('o1', '1');
     INSERT INTO `t_order` (`order_name`, `customer_id`) VALUES ('o2', '1');
     INSERT INTO `t_order` (`order_name`, `customer_id`) VALUES ('o3', '1'); 
@@ -1357,13 +1356,13 @@ select 元素允许你配置很多属性来配置每条语句的行为细节：
     ```java
     @Data
     public class Customer {
-
+    
       private Integer customerId;
       private String customerName;
       private List<Order> orderList;// 体现的是对多的关系
       
     }  
-
+    
     @Data
     public class Order {
       private Integer orderId;
@@ -1371,7 +1370,7 @@ select 元素允许你配置很多属性来配置每条语句的行为细节：
       private Customer customer;// 体现的是对一的关系
       
     }  
-
+    
     ```
 
 ### 3.2 对一映射
@@ -1391,34 +1390,34 @@ select 元素允许你配置很多属性来配置每条语句的行为细节：
     <!-- id属性：通常设置为这个resultMap所服务的那条SQL语句的id加上“ResultMap” -->
     <!-- type属性：要设置为这个resultMap所服务的那条SQL语句最终要返回的类型 -->
     <resultMap id="selectOrderWithCustomerResultMap" type="order">
-
+    
       <!-- 先设置Order自身属性和字段的对应关系 -->
       <id column="order_id" property="orderId"/>
-
+    
       <result column="order_name" property="orderName"/>
-
+    
       <!-- 使用association标签配置“对一”关联关系 -->
       <!-- property属性：在Order类中对一的一端进行引用时使用的属性名 -->
       <!-- javaType属性：一的一端类的全类名 -->
       <association property="customer" javaType="customer">
-
+    
         <!-- 配置Customer类的属性和字段名之间的对应关系 -->
         <id column="customer_id" property="customerId"/>
         <result column="customer_name" property="customerName"/>
-
+    
       </association>
-
+    
     </resultMap>
-
+    
     <!-- Order selectOrderWithCustomer(Integer orderId); -->
     <select id="selectOrderWithCustomer" resultMap="selectOrderWithCustomerResultMap">
-
+    
       SELECT order_id,order_name,c.customer_id,customer_name
       FROM t_order o
       LEFT JOIN t_customer c
       ON o.customer_id=c.customer_id
       WHERE o.order_id=#{orderId}
-
+    
     </select>
     ```
     对应关系可以参考下图：
@@ -1428,20 +1427,20 @@ select 元素允许你配置很多属性来配置每条语句的行为细节：
     ```xml
     <!-- 注册Mapper配置文件：告诉Mybatis我们的Mapper配置文件的位置 -->
     <mappers>
-
+    
       <!-- 在mapper标签的resource属性中指定Mapper配置文件以“类路径根目录”为基准的相对路径 -->
       <mapper resource="mappers/OrderMapper.xml"/>
-
+    
     </mappers>
     ```
 5.  junit测试程序
     ```java
     @Slf4j
     public class MyBatisTest {
-
+    
         private SqlSession session;
         // junit会在每一个@Test方法前执行@BeforeEach方法
-
+    
         @BeforeEach
         public void init() throws IOException {
             session = new SqlSessionFactoryBuilder()
@@ -1449,7 +1448,7 @@ select 元素允许你配置很多属性来配置每条语句的行为细节：
                             Resources.getResourceAsStream("mybatis-config.xml"))
                     .openSession();
         }
-
+    
         @Test
         public void testRelationshipToOne() {
         
@@ -1459,7 +1458,7 @@ select 元素允许你配置很多属性来配置每条语句的行为细节：
           log.info("order = " + order);
         
         }
-
+    
         // junit会在每一个@Test方法后执行@@AfterEach方法
         @AfterEach
         public void clear() {
@@ -1480,37 +1479,37 @@ select 元素允许你配置很多属性来配置每条语句的行为细节：
 2.  CustomerMapper接口
     ```java
     public interface CustomerMapper {
-
+    
       Customer selectCustomerWithOrderList(Integer customerId);
-
+    
     }
     ```
 3.  CustomerMapper.xml文件
     ```java
     <!-- 配置resultMap实现从Customer到OrderList的“对多”关联关系 -->
     <resultMap id="selectCustomerWithOrderListResultMap"
-
+    
       type="customer">
-
+    
       <!-- 映射Customer本身的属性 -->
       <id column="customer_id" property="customerId"/>
-
+    
       <result column="customer_name" property="customerName"/>
-
+    
       <!-- collection标签：映射“对多”的关联关系 -->
       <!-- property属性：在Customer类中，关联“多”的一端的属性名 -->
       <!-- ofType属性：集合属性中元素的类型 -->
       <collection property="orderList" ofType="order">
-
+    
         <!-- 映射Order的属性 -->
         <id column="order_id" property="orderId"/>
-
+    
         <result column="order_name" property="orderName"/>
-
+    
       </collection>
-
+    
     </resultMap>
-
+    
     <!-- Customer selectCustomerWithOrderList(Integer customerId); -->
     <select id="selectCustomerWithOrderList" resultMap="selectCustomerWithOrderListResultMap">
       SELECT c.customer_id,c.customer_name,o.order_id,o.order_name
@@ -1536,7 +1535,7 @@ select 元素允许你配置很多属性来配置每条语句的行为细节：
     ```java
     @Test
     public void testRelationshipToMulti() {
-
+    
       CustomerMapper customerMapper = session.getMapper(CustomerMapper.class);
       // 查询Customer对象同时将关联的Order集合查询出来
       Customer customer = customerMapper.selectCustomerWithOrderList(1);
@@ -1849,7 +1848,7 @@ PageHelper 是 MyBatis 中比较著名的分页插件，它提供了多种分页
         <artifactId>pagehelper</artifactId>
         <version>5.1.11</version>
     </dependency>
-
+    
     ```
 2.  mybatis-config.xml配置分页插件
 
@@ -1860,7 +1859,7 @@ PageHelper 是 MyBatis 中比较著名的分页插件，它提供了多种分页
             <property name="helperDialect" value="mysql"/>
         </plugin>
     </plugins>
-
+    
     ```
     其中，`com.github.pagehelper.PageInterceptor` 是 PageHelper 插件的名称，`dialect` 属性用于指定数据库类型（支持多种数据库）
 3.  页插件使用
@@ -1869,15 +1868,15 @@ PageHelper 是 MyBatis 中比较著名的分页插件，它提供了多种分页
     ```java
     @Test
     public void testTeacherRelationshipToMulti() {
-
+    
         TeacherMapper teacherMapper = session.getMapper(TeacherMapper.class);
-
+    
         PageHelper.startPage(1,2);
         // 查询Customer对象同时将关联的Order集合查询出来
         List<Teacher> allTeachers = teacherMapper.findAllTeachers();
     //
         PageInfo<Teacher> pageInfo = new PageInfo<>(allTeachers);
-
+    
         System.out.println("pageInfo = " + pageInfo);
         long total = pageInfo.getTotal(); // 获取总记录数
         System.out.println("total = " + total);
@@ -1890,7 +1889,7 @@ PageHelper 是 MyBatis 中比较著名的分页插件，它提供了多种分页
         List<Teacher> teachers = pageInfo.getList(); //获取查询页的数据集合
         System.out.println("teachers = " + teachers);
         teachers.forEach(System.out::println);
-
+    
     }
     ```
 
@@ -1956,9 +1955,9 @@ ORM（Object-Relational Mapping，对象-关系映射）是一种将数据库和
     正常使用即可，自动生成单表的crud方法！
     ```java
     package com.atguigu.mapper;
-
+    
     import com.atguigu.pojo.User;
-
+    
     /**
     * @author Jackiechan
     * @description 针对表【user】的数据库操作Mapper
@@ -1966,21 +1965,21 @@ ORM（Object-Relational Mapping，对象-关系映射）是一种将数据库和
     * @Entity com.atguigu.pojo.User
     */
     public interface UserMapper {
-
+    
         int deleteByPrimaryKey(Long id);
-
+    
         int insert(User record);
-
+    
         int insertSelective(User record);
-
+    
         User selectByPrimaryKey(Long id);
-
+    
         int updateByPrimaryKeySelective(User record);
-
+    
         int updateByPrimaryKey(User record);
-
+    
     }
-
+    
     ```
 
 ## 六、MyBatis总结
